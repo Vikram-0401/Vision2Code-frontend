@@ -1,8 +1,13 @@
 import React from 'react'
+import ImageUpload from './_components/imageUpload'
+
 
 function Dashboard() {
     return (
-        <div>Dashboard</div>
+        <div className='xl:px-20'>
+            <h2 className='font-bold text 4xl'> Convert Wireframe to Code </h2>
+            <ImageUpload />
+        </div>
     )
 }
 
