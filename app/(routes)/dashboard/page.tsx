@@ -1,5 +1,6 @@
 import React from 'react'
-import ImageUpload from './_components/imageUpload'
+import ImageUpload from './_components/ImageUpload'
+
 
 
 function Dashboard() {

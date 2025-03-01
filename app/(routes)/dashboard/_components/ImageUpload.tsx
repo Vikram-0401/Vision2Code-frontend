@@ -1,5 +1,7 @@
 "use client";
-import { CloudUpload, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { CloudUpload, Sparkles, SparklesIcon, X } from "lucide-react";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
@@ -23,7 +25,7 @@ function ImageUpload() {
         <div>
           {!previewUrl ? (
             <div className="p-7 border border-dashed rounded-md shadow-md flex flex-col items-center justify-center">
-              <CloudUpload className="h-10 w-10" />
+              <CloudUpload className="h-10 w-10 text-primary" />
               <h2>Upload Image</h2>
 
               <p className="text-gray-400 mt-3">
@@ -66,9 +68,14 @@ function ImageUpload() {
         </div>
 
         {/* User Input Textarea Section */}
-        <div>
-          User input text area
+        <div className="p-7 border shadow-md rounded">
+         <h2 className="font-bold text-lg"> Enter the description about your webpage </h2>
+         <Textarea className="mt-3 h-[150px]" placeholder='write about your webpage'/>
         </div>
+      </div>
+
+      <div className="mt-10 flex items-center justify-center">
+        <Button> <SparklesIcon /> Convert to Code</Button>
       </div>
     </div>
   );
