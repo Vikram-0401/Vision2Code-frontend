@@ -4,8 +4,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { CloudUpload, Sparkles, SparklesIcon, X } from "lucide-react";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 function ImageUpload() {
+  const AimodelList = [
+    {
+      name : 'Gemini Google',
+      icon : '/google.png'
+    },
+    {
+      name : 'llama By Meta',
+      icon : '/meta.png'
+    },
+    {
+      name : 'Deepseek',
+      icon : '/deepseek.png'
+    }
+  ]
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const OnImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
@@ -17,6 +39,8 @@ function ImageUpload() {
       setPreviewUrl(imageUrl);
     }
   };
+
+  
 
   return (
     <div className="mt-10">
@@ -69,8 +93,27 @@ function ImageUpload() {
 
         {/* User Input Textarea Section */}
         <div className="p-7 border shadow-md rounded">
-         <h2 className="font-bold text-lg"> Enter the description about your webpage </h2>
-         <Textarea className="mt-3 h-[150px]" placeholder='write about your webpage'/>
+
+         <h2 className="font-bold text-lg "> Select AI Model</h2>
+          <h2 className="mt-4"></h2>
+          <Select>
+            <SelectTrigger className="w-full">
+             <SelectValue placeholder="Select AI Model" />
+            </SelectTrigger>
+            <SelectContent>
+              {AimodelList.map((model,index) => (
+                <SelectItem value={model.name}>
+                  <div key={index} className="flex items-center gap-2">
+                    <Image src={model.icon} alt={model.name} width={25} height={35} />
+                    <h2> {model.name} </h2>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <h2 className="font-bold text-lg mt-5"> Enter the description about your webpage </h2>
+          <Textarea className="mt-4 h-[100px]" placeholder='write about your webpage'/>
         </div>
       </div>
 

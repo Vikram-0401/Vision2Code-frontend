@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/configs/db";
 import { usersTable } from "@/configs/schema";
 
+
 export async function POST(req: NextRequest) {
     const { userEmail, userName } = await req.json();
 
@@ -23,7 +24,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(result[0]);
     }
     return NextResponse.json(result[0]);
-
+    
+    
 
     // } catch (e) {
     //     return NextResponse.json(e)
