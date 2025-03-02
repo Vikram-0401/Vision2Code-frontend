@@ -1,4 +1,3 @@
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,7 +46,9 @@ function ImageUpload() {
       setPreviewUrl(imageUrl);
     }
   };
-
+  
+  // image uploading to the firebase storage
+  
   const OnConvertToCodeButtonClick= async()=>{
     if(!file || !model ||!description){
       console.log("select all fields");
