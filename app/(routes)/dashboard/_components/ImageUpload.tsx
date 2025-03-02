@@ -1,3 +1,4 @@
+
 "use client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "@/configs/firebaseConfig";
 
 
 function ImageUpload() {
@@ -29,6 +32,10 @@ function ImageUpload() {
     }
   ]
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [file, setFile] = useState<any>();
+  const [model,setModel] = useState<string>();
+  const [description,setDescription] = useState<string>();
+
 
   const OnImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -36,11 +43,25 @@ function ImageUpload() {
     if (files && files.length > 0) {
       console.log(files[0]);
       const imageUrl = URL.createObjectURL(files[0]);
+      setFile(files[0]);
       setPreviewUrl(imageUrl);
     }
   };
 
-  
+  const OnConvertToCodeButtonClick= async()=>{
+    if(!file || !model ||!description){
+      console.log("select all fields");
+      return;
+    }
+    const fileName = Date.now() + 'png';
+    const imageRef = ref(storage, "Vision2Code/"+ fileName);
+    await uploadBytes(imageRef,file).then( resp => {
+      console.log("Image Uploaded.....")
+    });
+
+    const imageUrl = await getDownloadURL(imageRef);
+    console.log(imageUrl);
+  }
 
   return (
     <div className="mt-10">
@@ -96,14 +117,14 @@ function ImageUpload() {
 
          <h2 className="font-bold text-lg "> Select AI Model</h2>
           <h2 className="mt-4"></h2>
-          <Select>
+          <Select onValueChange={(value) => setModel(value)}>
             <SelectTrigger className="w-full">
              <SelectValue placeholder="Select AI Model" />
             </SelectTrigger>
             <SelectContent>
               {AimodelList.map((model,index) => (
-                <SelectItem value={model.name}>
-                  <div key={index} className="flex items-center gap-2">
+                <SelectItem value={model.name} key={index}>
+                  <div className="flex items-center gap-2">
                     <Image src={model.icon} alt={model.name} width={25} height={35} />
                     <h2> {model.name} </h2>
                   </div>
@@ -113,12 +134,14 @@ function ImageUpload() {
           </Select>
 
           <h2 className="font-bold text-lg mt-5"> Enter the description about your webpage </h2>
-          <Textarea className="mt-4 h-[100px]" placeholder='write about your webpage'/>
+          <Textarea 
+          onChange={(event)=> setDescription(event?.target.value)}
+          className="mt-4 h-[100px]" placeholder='write about your webpage'/>
         </div>
       </div>
 
       <div className="mt-10 flex items-center justify-center">
-        <Button> <SparklesIcon /> Convert to Code</Button>
+        <Button onClick={OnConvertToCodeButtonClick}> <SparklesIcon /> Convert to Code</Button>
       </div>
     </div>
   );
