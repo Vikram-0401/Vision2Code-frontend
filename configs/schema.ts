@@ -9,7 +9,7 @@ export const usersTable = pgTable("users", {
 
 export const WireframeToCodeTable = pgTable("wireframeToCode", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    uid: integer().notNull(),
+    uid: varchar().notNull(),
     imageUrl: varchar(),
     model: varchar(),
     description: varchar(),

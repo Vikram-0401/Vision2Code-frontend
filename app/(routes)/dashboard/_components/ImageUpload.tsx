@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CloudUpload, Sparkles, SparklesIcon, X } from "lucide-react";
 import Image from "next/image";
+//@ts-ignore
+import uuid4 from "uuid4";
 import React, { ChangeEvent, useState } from "react";
 import {
   Select,
@@ -13,6 +15,8 @@ import {
 } from "@/components/ui/select"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/configs/firebaseConfig";
+import axios from "axios";
+import { useAuthContext } from "@/app/provider";
 
 
 function ImageUpload() {
@@ -34,7 +38,7 @@ function ImageUpload() {
   const [file, setFile] = useState<any>();
   const [model,setModel] = useState<string>();
   const [description,setDescription] = useState<string>();
-
+  const {user} = useAuthContext();
 
   const OnImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -62,6 +66,20 @@ function ImageUpload() {
 
     const imageUrl = await getDownloadURL(imageRef);
     console.log(imageUrl);
+
+    const uid = uuid4();
+    console.log(uid);
+    // Save Info To firbase
+
+    const result = await axios.post('/api/wireframe-to-code',{
+      uid:uid,
+      description:description,
+      imageUrl:imageUrl,
+      model:model,
+      email:user?.email
+    });
+    console.log(result.data);
+
   }
 
   return (
