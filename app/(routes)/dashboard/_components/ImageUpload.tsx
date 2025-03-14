@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { CloudUpload, Sparkles, SparklesIcon, X } from "lucide-react";
+import { CloudUpload, Loader2Icon, Sparkles, SparklesIcon, X } from "lucide-react";
 import Image from "next/image";
 //@ts-ignore
 import uuid4 from "uuid4";
@@ -17,6 +17,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/configs/firebaseConfig";
 import axios from "axios";
 import { useAuthContext } from "@/app/provider";
+import { useRouter } from "next/navigation";
 
 
 function ImageUpload() {
@@ -39,6 +40,8 @@ function ImageUpload() {
   const [model,setModel] = useState<string>();
   const [description,setDescription] = useState<string>();
   const {user} = useAuthContext();
+  const router = useRouter();
+  const [loading,setLoading] = useState(false);
 
   const OnImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -58,6 +61,10 @@ function ImageUpload() {
       console.log("select all fields");
       return;
     }
+    setLoading(true);
+
+    // Save image to firease
+
     const fileName = Date.now() + 'png';
     const imageRef = ref(storage, "Vision2Code/"+ fileName);
     await uploadBytes(imageRef,file).then( resp => {
@@ -79,6 +86,8 @@ function ImageUpload() {
       email:user?.email
     });
     console.log(result.data);
+    setLoading(false);
+    router.push('/view-code/' + uid);
 
   }
 
@@ -160,7 +169,9 @@ function ImageUpload() {
       </div>
 
       <div className="mt-10 flex items-center justify-center">
-        <Button onClick={OnConvertToCodeButtonClick}> <SparklesIcon /> Convert to Code</Button>
+        <Button onClick={OnConvertToCodeButtonClick} disabled={loading}> 
+          {loading?<Loader2Icon className="animate-spin"/>: <SparklesIcon /> } 
+          Convert to Code</Button>
       </div>
     </div>
   );
