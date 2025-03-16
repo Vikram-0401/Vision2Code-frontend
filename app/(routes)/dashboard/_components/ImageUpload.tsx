@@ -18,23 +18,10 @@ import { storage } from "@/configs/firebaseConfig";
 import axios from "axios";
 import { useAuthContext } from "@/app/provider";
 import { useRouter } from "next/navigation";
+import Constants from "@/data/Constants";
 
 
 function ImageUpload() {
-  const AimodelList = [
-    {
-      name : 'Gemini Google',
-      icon : '/google.png'
-    },
-    {
-      name : 'llama By Meta',
-      icon : '/meta.png'
-    },
-    {
-      name : 'Deepseek',
-      icon : '/deepseek.png'
-    }
-  ]
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [file, setFile] = useState<any>();
   const [model,setModel] = useState<string>();
@@ -150,7 +137,7 @@ function ImageUpload() {
              <SelectValue placeholder="Select AI Model" />
             </SelectTrigger>
             <SelectContent>
-              {AimodelList.map((model,index) => (
+              {Constants?.AimodelList.map((model,index) => (
                 <SelectItem value={model.name} key={index}>
                   <div className="flex items-center gap-2">
                     <Image src={model.icon} alt={model.name} width={25} height={35} />
