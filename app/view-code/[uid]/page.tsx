@@ -1,4 +1,5 @@
 "use client";
+import Constants from '@/data/Constants';
 import axios from 'axios';
 import { LoaderCircle } from 'lucide-react';
 import { useParams } from 'next/navigation'
@@ -17,6 +18,7 @@ function ViewCode() {
 
   const {uid} = useParams();
   const [loading, setLoading] = useState(false);
+  const [codeResp, steCodeResp] = useState('');
 
   useEffect(() => {
     uid && GetRecordInfo();
@@ -43,7 +45,7 @@ function ViewCode() {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        description:record?.description,
+        description:record?.description+":"+Constants.PROMPT,
         model:record.model,
         imageUrl:record?.imageUrl
       })
@@ -58,7 +60,8 @@ function ViewCode() {
       const {done, value} = await reader.read();
       if(done) break;
 
-      const text = (decoder.decode(value));
+      const text = (decoder.decode(value)).replace('```typescript','').replace('```','');
+      steCodeResp((prev) => prev + text);
       console.log(text);
     }
     setLoading(false);
@@ -69,6 +72,7 @@ function ViewCode() {
     <div>
       View-code
       {loading && <LoaderCircle className='animate-spin' />}
+      <p>{codeResp}</p>
     </div>
   )
 }
